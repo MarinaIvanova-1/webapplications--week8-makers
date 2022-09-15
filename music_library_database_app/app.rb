@@ -34,12 +34,16 @@ class Application < Sinatra::Base
   end
 
   post '/albums' do
-    album = Album.new
-    album.title = params[:title]
-    album.release_year = params[:release_year]
-    album.artist_id = params[:artist_id]
+    if invalid_request_parameters?
+      status 400
+      return ''
+    end
+    @album = Album.new
+    @album.title = params[:title]
+    @album.release_year = params[:release_year]
+    @album.artist_id = params[:artist_id]
     repo = AlbumRepository.new
-    repo.create(album)
+    repo.create(@album)
 
     return ''
   end
@@ -65,4 +69,13 @@ class Application < Sinatra::Base
 
     return erb(:artists)
   end
+
+  get '/new-album' do
+    return erb(:new_album)
+  end
+
+  def invalid_request_parameters?
+    return (params[:title] == nil || params[:release_year] == nil || params[:artist_id] == nil)
+  end
 end
+

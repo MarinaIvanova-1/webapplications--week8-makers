@@ -69,4 +69,15 @@ describe Application do
       expect(response.body).to include('<p>Taylor Swift</p>')
     end
   end
+
+  context "GET /new-album" do
+    it 'shows a form to input a new album' do
+      response = get('/new-album')
+      expect(response.status).to eq(200)
+      expect(response.body).to include('<form method="POST" action="/albums">')
+      expect(response.body).to include('<input type="text" name="title">')
+    end
+  end
+
+
 end
